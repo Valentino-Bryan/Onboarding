@@ -1,0 +1,363 @@
+/* ---------------- GLOBAL ---------------- */
+body {
+    margin: 0;
+    font-family: "Inter", sans-serif;
+    background: #f9fafb;
+    color: #111827;
+    overflow: hidden;
+}
+
+.page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------------- HEADER + NAV ---------------- */
+.header {
+    background: #fff;
+    border-bottom: 1px solid #ffffff;
+    box-shadow: 0 25px 30px rgba(0,0,0,0.03);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav {
+    max-width: 1100px;
+    margin: auto;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Left-side brand */
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.nav-left img {
+    width: 400px;
+    height: auto;
+    border-radius: 6px;
+    object-fit: cover;
+}
+
+/* Right side (desktop) */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.welcome {
+    font-size: 16px;
+    color: #45026c;
+}
+
+/* Logout buttons */
+.logout-btn {
+    background: linear-gradient(135deg,#f3f4f6,#e5e7eb);
+    color: #374151;
+    border: 1px solid #e5e7eb;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.25s ease;
+    text-decoration: none;
+}
+
+.logout-btn:hover {
+    background: linear-gradient(135deg,#e5e7eb,#d1d5db);
+    color: #111827;
+}
+
+/* ----- HAMBURGER MENU (MOBILE) ----- */
+.hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+
+.hamburger span {
+    background: #44205f;
+    width: 24px;
+    height: 3px;
+    border-radius: 3px;
+    transition: 0.3s;
+}
+
+/* Mobile dropdown */
+.mobile-menu {
+    display: none;
+    flex-direction: column;
+    padding: 12px 20px;
+    background: #fff;
+    border-top: 1px solid #e5e7eb;
+    animation: fadeIn 0.3s ease forwards;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.mobile-menu a {
+    padding: 10px 0;
+    color: #4b5563;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.mobile-menu a:hover,
+.mobile-menu .mobile-logout:hover {
+    color: #44205f;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ----- RESPONSIVE RULES ----- */
+@media (max-width: 900px) {
+    .nav-right { display: none; }
+    .hamburger { display: flex; }
+}
+
+/* ---------------- MAIN LAYOUT ---------------- */
+.main {
+    padding: 40px 20px 60px;
+    flex-grow: 1;
+}
+
+.layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+    max-width: 1100px;
+    margin: auto;
+}
+
+@media(min-width: 900px) {
+    .layout {
+        grid-template-columns: 350px 1fr;
+    }
+}
+
+/* ---------------- PROGRESS CARD ---------------- */
+.progress-card {
+    background: #fff;
+    padding: 30px;
+    border-radius: 14px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    position: sticky;
+    top: 20px;
+    transition: transform 0.2s ease;
+}
+
+.progress-card:hover {
+    transform: translateY(-3px);
+}
+
+.progress-wrapper {
+    width: 180px;
+    height: 180px;
+    margin: auto;
+    position: relative;
+}
+
+.progress-bg {
+    fill: none;
+    stroke: #e5e7eb;
+    stroke-width: 12;
+}
+
+.progress-bar {
+    fill: none;
+    stroke: #6b21a8;
+    stroke-width: 12;
+    stroke-dasharray: 339.292;
+    stroke-dashoffset: 339.292;
+    transform: rotate(-90deg);
+    transform-origin: 60px 60px;
+    transition: stroke-dashoffset 1s ease-out;
+}
+
+.progress-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.progress-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: #44205f;
+}
+
+.progress-text {
+    font-size: 14px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+.progress-info {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.progress-info h2 {
+    font-size: 22px;
+    margin-bottom: 6px;
+}
+
+/* ---------------- CHECKLIST ---------------- */
+.checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.checklist-item {
+    background: #fff;
+    padding: 18px 20px;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.25s ease;
+}
+
+.checklist-item:hover {
+    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+    border-color: #44205f;
+    transform: translateY(-2px);
+}
+
+.left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.circle {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #44205f;
+    transition: all 0.25s ease;
+}
+
+.circle.checked {
+    background: #44205f;
+    box-shadow: 0 0 10px rgba(68,32,95,0.4);
+}
+
+.btn {
+    background: linear-gradient(135deg,#6b21a8,#a78bfa);
+    color: #fff;
+    padding: 8px 22px;
+    border-radius: 22px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.25s, box-shadow 0.25s;
+}
+
+.btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(68,32,95,0.3);
+}
+
+/* ---------------- FOOTER ---------------- */
+.footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 14px;
+    color: #6b7280;
+    border-top: 1px solid #e5e7eb;
+}
+
+/* ---------------- LOGOUT MODAL ---------------- */
+.logout-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.logout-modal.show {
+    display: flex;
+}
+
+.logout-modal-content {
+    background: #fff;
+    padding: 24px 28px;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 320px;
+    width: 90%;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.logout-modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-cancel {
+    background: #e5e7eb;
+    color: #374151;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-cancel:hover { background: #d1d5db; }
+
+.btn-confirm {
+    background: #44205f;
+    color: white;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.btn-confirm:hover { background: #391e54; }
+
+/* ========================= */
+/* CONFETTI ANIMATION */
+.confetti {
+    position: absolute;
+    top: 0;
+    width: 8px;
+    height: 12px;
+    background: #44205f;
+    opacity: 0.9;
+    pointer-events: none;
+    z-index: 9999;
+    animation: confettiFall 2s ease-out forwards;
+    border-radius: 2px;
+}
+
+@keyframes confettiFall {
+    from { transform: translateY(0) rotate(0deg); opacity: 1; }
+    to { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
