@@ -44,7 +44,7 @@ $percent = $total ? round($done/$total*100) : 0;
         <nav class="nav">
 
             <div class="nav-left">
-                <img src="../images/logo.jpg">
+                <img src="../images/logo_technolab 1.svg">
 
                
             </div>
