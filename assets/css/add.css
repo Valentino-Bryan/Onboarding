@@ -1,258 +1,321 @@
 /* ============================
-   add.css — volledige styling
+   add.css — login & registration
    ============================ */
 
-/* Zorg dat er geen scroll is */
+/* ============================
+   VARIABLES
+============================ */
+:root {
+    --purple: #8A2BE2;
+    --purple-dark: #6B21A8;
+    --green: #22C55E;
+    --green-dark: #16A34A;
+    --bg: #f3f4f6;
+    --card-bg: rgba(255,255,255,0.56);
+    --card-bg-dark: rgba(7,10,16,0.48);
+    --text: #111827;
+    --text-muted: #6b7280;
+    --border: #e5e7eb;
+    --radius-lg: 20px;
+    --radius-md: 6px;
+    --shadow: 0 18px 40px rgba(2,6,23,0.12);
+    --shadow-dark: 0 18px 40px rgba(2,6,23,0.5);
+    --transition-fast: 0.18s ease;
+    --transition-slower: 0.2s ease;
+    --font: 'Inter', sans-serif;
+}
+
+/* ============================
+   RESET & BODY
+============================ */
+* {
+    box-sizing: border-box;
+}
+
 html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  font-family: 'Inter', sans-serif;
-  background: #f3f4f6;
-  color: #111827;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
-/* Wrapper die alles centreert */
+/* ============================
+   PAGE WRAPPER
+============================ */
 .page-wrapper {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  padding: 2rem;
-  box-sizing: border-box;
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 2rem;
 }
 
-/* ----------------------------
-   Achtergrond blobs
-   ---------------------------- */
+/* ============================
+   BLOBS
+============================ */
 .blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.28;
-  pointer-events: none;
-  will-change: transform;
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.28;
+    pointer-events: none;
+    will-change: transform;
 }
 
 .blob-purple {
-  width: 55vw;
-  height: 55vw;
-  top: -18vh;
-  left: -18vw;
-  background: linear-gradient(135deg,#8A2BE2,#6B21A8);
-  animation: blob-spin 15s linear infinite;
+    width: 55vw;
+    height: 55vw;
+    top: -18vh;
+    left: -18vw;
+    background: linear-gradient(135deg, var(--purple), var(--purple-dark));
+    animation: blob-spin 15s linear infinite;
 }
 
 .blob-green {
-  width: 55vw;
-  height: 55vw;
-  bottom: -18vh;
-  right: -18vw;
-  background: linear-gradient(135deg,#22C55E,#16A34A);
-  animation: blob-spin-reverse 20s linear infinite;
+    width: 55vw;
+    height: 55vw;
+    bottom: -18vh;
+    right: -18vw;
+    background: linear-gradient(135deg, var(--green), var(--green-dark));
+    animation: blob-spin-reverse 20s linear infinite;
 }
 
 @keyframes blob-spin {
-  0% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -50px) scale(1.06); }
-  66% { transform: translate(-20px, 20px) scale(0.95); }
-  100% { transform: translate(0, 0) scale(1); }
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -50px) scale(1.06); }
+    66% { transform: translate(-20px, 20px) scale(0.95); }
+    100% { transform: translate(0, 0) scale(1); }
 }
 
 @keyframes blob-spin-reverse {
-  0% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(-40px, 60px) scale(1.12); }
-  66% { transform: translate(25px, -30px) scale(0.92); }
-  100% { transform: translate(0, 0) scale(1); }
+    0% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(-40px, 60px) scale(1.12); }
+    66% { transform: translate(25px, -30px) scale(0.92); }
+    100% { transform: translate(0, 0) scale(1); }
 }
 
-/* ----------------------------
-   Form wrapper & logo
-   ---------------------------- */
+/* ============================
+   FORM WRAPPER & CARD
+============================ */
 .form-wrapper {
-  position: relative;
-  z-index: 10;
-  width: 100%;
-  max-width: 640px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .logo-top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #111827;
-  margin-bottom: 18px;
-  align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+    align-self: flex-start;
+    color: var(--text);
 }
 
 .logo-icon {
-  width: 36px;
-  height: 36px;
-  color: rgba(17,24,39,0.95);
+    width: 36px;
+    height: 36px;
+    color: rgba(17,24,39,0.95);
 }
 
 .logo-text {
-  font-size: 1.2rem;
-  font-weight: 700;
-  color: rgba(17,24,39,0.95);
+    font-size: 1.2rem;
+    font-weight: 700;
 }
 
-/* ----------------------------
-   Card (GLASS + LANGER GEREKT)
-   ---------------------------- */
+/* CARD */
 .card {
-  width: 100%;
-  background: rgba(255,255,255,0.56);
-  backdrop-filter: blur(18px);
-  -webkit-backdrop-filter: blur(18px);
-  border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.12);
-  box-shadow: 0 18px 40px rgba(2,6,23,0.12);
-
-  padding: 50px 32px;       /* langere card */
-  min-height: 520px;        /* vaste rechthoekige hoogte */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  box-sizing: border-box;
+    width: 100%;
+    background: var(--card-bg);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: var(--shadow);
+    padding: 50px 32px;
+    min-height: 520px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
-/* Titel sectie */
+/* TITLE SECTION */
 .title-section h1 {
-  margin: 0 0 8px 0;
-  font-size: 28px;
-  line-height: 1.05;
-  color: #0f172a;
-  font-weight: 800;
+    margin: 0 0 8px 0;
+    font-size: 28px;
+    font-weight: 800;
+    color: #0f172a;
 }
 
 .title-section p {
-  margin: 0 0 22px 0;
-  color: #6b7280;
-  font-size: 15px;
+    margin: 0 0 22px 0;
+    color: var(--text-muted);
+    font-size: 15px;
 }
 
-/* ----------------------------
-   Form elementen
-   ---------------------------- */
-.form {
-  height: 400px;
-  width: 100%;
-}
-
+/* ============================
+   FORM ELEMENTS
+============================ */
 .form-group {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 14px;
 }
 
 .form-group label {
-  font-size: 14px;
-  font-weight: 600;
-  color: #0f172a;
-  margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
 }
 
 input[type="text"],
 input[type="email"],
 input[type="password"],
 select {
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: 12px;
-  border: none;
-  background: rgba(255,255,255,0.8);
-  color: #111827;
-  font-size: 15px;
-  transition: box-shadow .18s ease, transform .12s ease;
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: var(--radius-md);
+    border: none;
+    background: rgba(255,255,255,0.8);
+    color: var(--text);
+    font-size: 15px;
+    transition: box-shadow var(--transition-fast), transform var(--transition-fast);
 }
 
 input::placeholder {
-  color: #9ca3af;
+    color: #9ca3af;
 }
 
 input:focus,
 select:focus {
-  outline: none;
-  box-shadow: 0 6px 22px rgba(138,43,226,0.12);
-  transform: translateY(-1px);
+    outline: none;
+    box-shadow: 0 6px 22px rgba(138,43,226,0.12);
+    transform: translateY(-1px);
 }
 
-/* ----------------------------
-   Button
-   ---------------------------- */
-.button-wrapper {
-  margin-top: 22px;
-}
-
+/* ============================
+   BUTTONS
+============================ */
 button[type="submit"] {
-  width: 100%;
-  padding: 14px 18px;
-  border-radius: 999px;
-  border: none;
-  cursor: pointer;
-  font-weight: 800;
-  font-size: 16px;
-  color: #fff;
-  background: linear-gradient(90deg, #22C55E 0%, #8A2BE2 100%);
-  box-shadow: 0 12px 30px rgba(34,197,94,0.16);
-  transition: transform .18s ease, box-shadow .18s ease;
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 999px;
+    border: none;
+    cursor: pointer;
+    font-weight: 800;
+    font-size: 16px;
+    color: #fff;
+    background: linear-gradient(90deg, var(--green) 0%, var(--purple) 100%);
+    box-shadow: 0 12px 30px rgba(34,197,94,0.16);
+    transition: transform var(--transition-fast), box-shadow var(--transition-fast);
 }
 
 button[type="submit"]:hover {
-  transform: translateY(-3px) scale(1.01);
-  box-shadow: 0 18px 40px rgba(138,43,226,0.14);
+    transform: translateY(-3px) scale(1.01);
+    box-shadow: 0 18px 40px rgba(138,43,226,0.14);
 }
 
-/* ----------------------------
-   Responsiviteit
-   ---------------------------- */
-@media (max-width: 720px) {
-  .card {
-    padding: 32px 20px;
-    min-height: 460px;
-  }
-
-  .form-wrapper {
-    max-width: 92%;
-  }
-
-  .logo-top {
-    align-self: center;
-  }
-
-  .logo-text {
+/* ============================
+   TASK / EDIT FORM
+============================ */
+.edit-form {
     display: none;
-  }
+    margin-top: 12px;
+    padding: 16px;
+    background: #f9fafb;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* ----------------------------
-   Dark mode
-   ---------------------------- */
-body.dark,
-html.dark body {
-  background: #0b1220;
-  color: #e6eef8;
+.edit-form.active { display: block; }
+
+.edit-form form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+}
+
+.edit-form input[type="text"] {
+    flex: 1;
+    min-width: 200px;
+    padding: 8px;
+}
+
+/* EDIT / DELETE BUTTONS */
+.btn-edit,
+.btn-delete {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    border: none;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: var(--transition-slower);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-edit { background: #f3f4f6; color: #374151; }
+.btn-delete { background: #dc2626; color: #fff; }
+
+.btn-save { background: #10b981; color: white; }
+.btn-cancel { background: #6b7280; color: white; }
+
+/* ============================
+   NO TASKS / EMPTY STATES
+============================ */
+.no-tasks {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-muted);
+    background: #f9fafb;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+}
+
+/* ============================
+   RESPONSIVE
+============================ */
+@media (max-width: 720px) {
+    .card { padding: 32px 20px; min-height: 460px; }
+    .form-wrapper { max-width: 92%; }
+    .logo-top { align-self: center; }
+    .logo-text { display: none; }
+}
+
+/* ============================
+   DARK MODE
+============================ */
+body.dark {
+    background: #0b1220;
+    color: #e6eef8;
 }
 
 body.dark .card {
-  background: rgba(7,10,16,0.48);
-  border: 1px solid rgba(255,255,255,0.04);
-  box-shadow: 0 18px 40px rgba(2,6,23,0.5);
+    background: var(--card-bg-dark);
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: var(--shadow-dark);
 }
 
 body.dark input,
 body.dark select {
-  background: rgba(255,255,255,0.03);
-  color: #e6eef8;
-  border: 1px solid rgba(255,255,255,0.03);
+    background: rgba(255,255,255,0.03);
+    color: #e6eef8;
+    border: 1px solid rgba(255,255,255,0.03);
 }

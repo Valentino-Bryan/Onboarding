@@ -1,276 +1,8 @@
 /* -----------------------------------
-   GLOBAL
+   CHECKLIST & TASKS
 ----------------------------------- */
-* {
-    box-sizing: border-box;
-}
 
-body.page {
-    margin: 0;
-    font-family: "Space Grotesk", sans-serif;
-    background: #ffffff;
-    color: #333;
-}
-
-.material-symbols-outlined {
-    font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
-    font-family: 'Material Symbols Outlined', sans-serif;
-    font-weight: normal;
-    font-style: normal;
-    font-size: 24px;
-    line-height: 1;
-    letter-spacing: normal;
-    text-transform: none;
-    display: inline-block;
-    white-space: nowrap;
-    word-wrap: normal;
-    direction: ltr;
-    -webkit-font-smoothing: antialiased;
-    text-rendering: optimizeLegibility;
-    -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: 'liga';
-}
-
-/* Fallback for when icons don't load */
-.material-symbols-outlined:not(:defined) {
-    color: transparent;
-    position: relative;
-}
-
-.material-symbols-outlined:not(:defined)::before {
-    content: attr(data-icon);
-    position: absolute;
-    left: 0;
-    top: 0;
-    color: inherit;
-    font-family: monospace;
-    font-size: 16px;
-}
-
-/* Colors */
-:root {
-    --techno-purple: #44205F;
-    --techno-green: #94C01F;
-    --gray-100: #f3f4f6;
-    --gray-200: #e5e7eb;
-    --gray-300: #d1d5db;
-    --gray-400: #9ca3af;
-    --gray-500: #6b7280;
-    --gray-600: #4b5563;
-    --gray-800: #1f2937;
-}
-
-/* Layout container */
-.layout {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    padding: 20px 40px;
-    max-width: 1280px;
-    margin: auto;
-}
-
-/* -----------------------------------
-   TECHNOLAB HEADER FIXED
------------------------------------ */
-.tech-header {
-    background: #ffffff;
-    border-bottom: 1px solid #e6e6e6;
-    padding: 0 20px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-}
-
-.nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    height: 70px;
-}
-
-/* LOGO + TITEL */
-.nav-left {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.nav-left svg {
-    fill: #000000;
-}
-
-.brand {
-    font-size: 20px;
-    font-weight: 600;
-    margin: 0;
-}
-
-/* RIGHT SIDE */
-.nav-right {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-/* Avatar Variants */
-.avatar {
-    border-radius: 50%;
-}
-.avatar.photo {
-    background-size: cover;
-    background-position: center;
-}
-.avatar.small {
-    width: 40px;
-    height: 40px;
-}
-
-.hamburger {
-    display: none;
-    flex-direction: column;
-    gap: 5px;
-    cursor: pointer;
-    margin-left: auto; /* 👈 duwt hamburger naar rechts */
-}
-
-
-.hamburger span {
-    width: 26px;
-    height: 3px;
-    background: #000;
-    border-radius: 5px;
-}
-
-/* MOBILE MENU */
-.mobile-menu {
-    display: none;
-    flex-direction: column;
-    background: white;
-    border-top: 1px solid #e1e1e1;
-    padding: 10px 0;
-}
-
-.mobile-menu a {
-    padding: 14px 20px;
-    text-decoration: none;
-    color: #333;
-    font-size: 16px;
-}
-
-.mobile-menu a:hover {
-    background: #f5f5f5;
-}
-
-/* -----------------------------------
-   MAIN
------------------------------------ */
-.main {
-    flex: 1;
-    padding-top: 40px;
-}
-
-/* Page Top Section */
-.top-bar {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 20px;
-}
-
-.title-block h2 {
-    font-size: 2.5rem;
-    font-weight: 900;
-    margin: 0;
-}
-
-.title-block p {
-    margin: 8px 0 0;
-    color: var(--gray-500);
-}
-
-/* -----------------------------------
-   USER SELECT
------------------------------------ */
-.user-select {
-    min-width: 280px;
-    position: relative;
-}
-
-.user-select label {
-    font-weight: 700;
-    display: block;
-    margin-bottom: 8px;
-}
-
-.input-wrapper {
-    position: relative;
-}
-
-.input-wrapper input {
-    width: 100%;
-    padding: 12px 12px 12px 40px;
-    border: 1px solid var(--gray-300);
-    border-radius: 10px;
-    font-size: 1rem;
-}
-
-.input-wrapper input:focus {
-    outline: none;
-    border-color: var(--techno-purple);
-    box-shadow: 0 0 0 3px rgba(68, 32, 95, 0.25);
-}
-
-.input-icon {
-    position: absolute;
-    top: 50%;
-    left: 12px;
-    transform: translateY(-50%);
-    color: var(--gray-400);
-}
-
-/* Dropdown list (closed by default!) */
-.dropdown {
-    display: none;
-    position: absolute;
-    width: 100%;
-    margin-top: 5px;
-    max-height: 300px;
-    overflow-y: auto;
-    background: white;
-    border: 1px solid var(--gray-200);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-    border-radius: 12px;
-    z-index: 20;
-}
-
-.dropdown.show {
-    display: block;
-}
-
-.dropdown-item {
-    display: flex;
-    gap: 12px;
-    padding: 12px;
-    cursor: pointer;
-    border-bottom: 1px solid var(--gray-100);
-}
-
-.dropdown-item:hover {
-    background: rgba(68, 32, 95, 0.05);
-}
-
-.dropdown-footer {
-    text-align: center;
-    padding: 12px;
-    font-size: 0.85rem;
-    color: var(--gray-500);
-}
-
-/* -----------------------------------
-   CHECKLIST SELECT
------------------------------------ */
+/* Checklist Select Wrapper */
 .checklist-select {
     margin-top: 20px;
     padding: 0 4px;
@@ -288,66 +20,84 @@ body.page {
     border-radius: 10px;
     border: 1px solid var(--gray-300);
     font-size: 1rem;
-    background: white;
+    background: #fff;
     text-align: left;
     position: relative;
     cursor: pointer;
+    transition: all 0.15s ease;
 }
 
-/* Icon position */
+.checklist-select button:hover {
+    border-color: var(--techno-purple);
+    box-shadow: 0 2px 8px rgba(68, 32, 95, 0.1);
+}
+
+/* Icon position inside checklist button */
 .checklist-select button span {
     position: absolute;
     right: 16px;
     top: 50%;
     transform: translateY(-50%);
     color: var(--gray-500);
+    transition: transform 0.15s ease;
 }
 
-/* -----------------------------------
-   TASKS
------------------------------------ */
+/* Task Section Container */
 .task-section {
-    background: white;
+    background: #fff;
     border: 1px solid var(--gray-200);
     border-radius: 16px;
     padding: 30px;
     margin-top: 40px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
+/* Task Section Header */
 .task-section h3 {
-    font-size: 1.4rem;
+    font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 20px;
+    color: var(--gray-800);
 }
 
+/* Individual Task Item */
 .task-item {
     display: flex;
     align-items: center;
     gap: 16px;
     padding: 16px 0;
     border-bottom: 1px solid var(--gray-200);
+    transition: background 0.15s, box-shadow 0.15s;
+}
+
+.task-item:last-child {
+    border-bottom: none;
 }
 
 .task-item p {
     flex: 1;
     margin: 0;
+    font-size: 1rem;
+    color: var(--gray-800);
 }
 
+/* Drag Icon */
 .drag-icon {
     color: var(--gray-400);
     cursor: grab;
 }
 
+/* Task Buttons (Edit/Delete) */
 .task-item button {
     border: none;
     background: transparent;
     cursor: pointer;
     padding: 8px;
     border-radius: 6px;
-    transition: all 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all 0.2s ease;
 }
 
 .task-item button:hover {
@@ -376,11 +126,11 @@ body.page {
     font-size: 20px;
 }
 
-/* Add new task */
+/* Add New Task Button */
 .add-task-btn {
     margin-top: 20px;
     background: var(--techno-purple);
-    color: white;
+    color: #fff;
     padding: 14px 20px;
     border-radius: 12px;
     font-weight: 700;
@@ -390,15 +140,15 @@ body.page {
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: background 0.2s ease, transform 0.15s ease;
 }
 
 .add-task-btn:hover {
     background: #35184c;
+    transform: translateY(-1px);
 }
 
-/* -----------------------------------
-   FOOTER BUTTONS
------------------------------------ */
+/* Footer Action Buttons */
 .footer-actions {
     display: flex;
     justify-content: flex-end;
@@ -415,6 +165,12 @@ body.page {
     font-weight: 700;
     border: none;
     cursor: pointer;
+    transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.cancel-btn:hover {
+    background: var(--gray-300);
+    transform: translateY(-1px);
 }
 
 .save-btn {
@@ -429,13 +185,16 @@ body.page {
     display: flex;
     align-items: center;
     gap: 8px;
+    transition: background 0.15s ease, transform 0.15s ease;
 }
 
-/* ------------------------------------------------ */
-/* --- RESPONSIVE --- */
-/* ------------------------------------------------ */
-@media (max-width: 900px) {
+.save-btn:hover {
+    background: #7aba2a;
+    transform: translateY(-1px);
+}
 
+/* Responsive Tweaks */
+@media (max-width: 900px) {
     .desktop-only {
         display: none;
     }
@@ -446,5 +205,16 @@ body.page {
 
     .mobile-menu.show {
         display: flex;
+    }
+
+    .task-section {
+        padding: 20px;
+    }
+
+    .add-task-btn,
+    .cancel-btn,
+    .save-btn {
+        width: 100%;
+        justify-content: center;
     }
 }

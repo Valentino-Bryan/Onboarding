@@ -95,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <header>
-            <img alt="Technolab Logo" class="logo" src=""/>
+            <img alt="Technolab Logo" class="logo" src="../images/logo_technolab 1.svg"/>
         </header>
 
         <main>
