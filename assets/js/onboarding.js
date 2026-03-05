@@ -53,6 +53,10 @@ document.addEventListener("DOMContentLoaded", () => {
     items.forEach(item => {
         const circle = item.querySelector(".circle");
 
+        if (circle.classList.contains("checked")) {
+            completed++;
+        }
+
         item.addEventListener("click", () => {
             if (circle.classList.contains("checked")) {
                 circle.classList.remove("checked");

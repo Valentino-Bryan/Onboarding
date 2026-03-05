@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="container">
   <header>
-    <img alt="Technolab Logo" class="logo" src=""/>
+    <img alt="Technolab Logo" class="logo" src="../images/logo_technolab 1.svg"/>
   </header>
 
   <main>
@@ -110,7 +110,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   </main>
 
   <footer>
-    <p>© Technolab Leiden | Onboarding - Chahid</p>
+    <p>© Technolab Leiden | Onboarding</p>
   </footer>
 </div>
 </body>

@@ -103,9 +103,9 @@ $percent = $total ? round($done/$total*100) : 0;
 
             <div class="checklist">
                 <?php foreach($items as $item): ?>
-                    <div class="checklist-item">
+                    <div class="checklist-item" data-task-id="<?= $item['id'] ?>" data-completed="<?= $item['completed'] ?>">
                         <div class="left">
-                            <div class="circle"></div>
+                            <div class="circle <?= $item['completed'] ? 'checked' : '' ?>"></div>
                             <span><?= ($item['title']) ?></span>
                         </div>
                         <button class="btn" id="detailsBtn" >Bekijk details</button>
@@ -120,7 +120,7 @@ $percent = $total ? round($done/$total*100) : 0;
     <!-- FOOTER -->
     <!-- ========================= -->
     <footer class="footer">
-        <p> Technolab Leiden | Onboarding - Safouane</p>
+        <p> Technolab Leiden | Onboarding</p>
     </footer>
 
 </div>
@@ -152,6 +152,32 @@ function closeLogoutModal() {
 
 function confirmLogout() {
     window.location.href = logoutUrl;
+}
+
+document.querySelectorAll('.checklist-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const taskId = item.getAttribute('data-task-id');
+        const completed = item.getAttribute('data-completed') === '1' ? 0 : 1;
+        updateProgress(<?= $userId ?>, taskId, completed);
+        item.setAttribute('data-completed', completed);
+    });
+});
+
+async function updateProgress(user_id, task_id, completed = 1) {
+    await fetch('../Database/task.php?user_id=' + user_id + '&task_id=' + task_id + '&completed=' + completed, {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            console.log('Voortgang bijgewerkt');
+            // Optioneel: update de voortgangsweergave hier
+        } else {
+            console.error('Fout bij bijwerken voortgang:', data.message);
+        }
+    })
+    .catch(error => console.error('Netwerkfout:', error));
 }
 </script>
 </body>

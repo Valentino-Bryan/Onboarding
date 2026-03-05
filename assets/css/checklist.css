@@ -1,6 +1,20 @@
 /* -----------------------------------
    CHECKLIST & TASKS
 ----------------------------------- */
+#user-search {
+    
+}
+.dropdown-item:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.dropdown-item {
+    padding: 10px 16px;
+    border-radius: 8px;
+    transition: background 0.15s ease;
+}
+
+.dropdown {}
 
 /* Checklist Select Wrapper */
 .checklist-select {
