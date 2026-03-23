@@ -47,6 +47,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             $errors[] = 'Fout bij bewerken: ' . $e->getMessage();
         }
+    } elseif($action === 'create') {
+        if ($title) {
+            try {
+                $stmt = $pdo->prepare("INSERT INTO checklists (title, description) VALUES (?, ?)");
+                $stmt->execute([$title, $description]);
+                $success = 'Afvinklijst toegevoegd.';
+                header('Location: afvinklijsten_beheren.php?success=' . urlencode($success));
+                exit();
+            } catch (PDOException $e) {
+                $errors[] = 'Fout bij toevoegen: ' . $e->getMessage();
+            }
+        } else {
+            $errors[] = 'Titel is verplicht voor een nieuwe afvinklijst.';
+        }
     }
 }
 
@@ -115,6 +129,7 @@ if (isset($_GET['edit'])) {
                     <input id="title" name="title" type="text" placeholder="Nieuwe afvinklijst" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 16px;">
                 </div>
                 <div style="margin-bottom: 12px;">
+                    <input type="hidden" name="action" value="create">
                     <label for="description" style="display: block; margin-bottom: 4px; font-weight: 500; color: #374151;">Beschrijving</label>
                     <textarea id="description" name="description" rows="3" placeholder="Optionele beschrijving" style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 16px; resize: vertical;"></textarea>
                 </div>
