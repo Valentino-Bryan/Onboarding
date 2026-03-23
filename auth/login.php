@@ -125,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </main>
 
         <footer>
-            <p>© Technolab Leiden | Onboarding</p>
+            <p>© Technolab Leiden | Onboardingq</p>
         </footer>
     </div>
 </body>

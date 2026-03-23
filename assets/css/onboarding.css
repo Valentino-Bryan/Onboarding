@@ -4,8 +4,9 @@ body {
     font-family: "Inter", sans-serif;
     background: #f9fafb;
     color: #111827;
-    overflow: hidden;
+    /* overflow: hidden;  <-- verwijderen */
 }
+
 
 .page {
     min-height: 100vh;
