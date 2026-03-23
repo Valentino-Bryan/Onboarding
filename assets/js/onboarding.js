@@ -17,60 +17,63 @@ hamburger.addEventListener("click", () => {
    CHECKLIST + PROGRESS + CONFETTI
 --------------------------------- */
 document.addEventListener("DOMContentLoaded", () => {
-    const items = document.querySelectorAll(".checklist-item");
-    const progressText = document.querySelector(".progress-num");
-    const progressBar = document.querySelector(".progress-bar");
-    let completed = 0;
+    const progressCards = document.querySelectorAll(".progress-card");
 
-    // Initialiseer voortgang op basis van PHP percentage (optioneel)
-    const progressCard = document.querySelector(".progress-card");
-    if (progressCard && progressCard.dataset.complete === "true") {
-        completed = items.length;
-        updateProgress();
-    }
+    progressCards.forEach(card => {
+        const items = card.parentElement.querySelectorAll(".checklist-item");
+        const progressText = card.querySelector(".progress-num");
+        const progressBar = card.querySelector(".progress-bar");
+        let completed = 0;
+        let percentage;
 
-    // Update voortgang functie
-    function updateProgress() {
-        const total = items.length;
-        const percentage = Math.round((completed / total) * 100);
-        progressText.textContent = percentage + "%";
-
-        // Update circle animatie
-        const stroke = 339.292;
-        const offset = stroke - (stroke * (percentage / 100));
-        progressBar.style.strokeDashoffset = offset;
-
-        
-
-        // Confetti trigger bij 100%
-        if (percentage === 100) {  
-            launchConfetti();
-            sessionStorage.setItem("confettiPlayed", "true");
-        }
-    }
-
-    // Klik-event voor checklist items
-    items.forEach(item => {
-        const circle = item.querySelector(".circle");
-
-        if (circle.classList.contains("checked")) {
-            completed++;
+        if (items.length > 0) {
+            // Count initial checked
+            items.forEach(item => {
+                const circle = item.querySelector(".circle");
+                if (circle.classList.contains("checked")) {
+                    completed++;
+                }
+            });
+            percentage = Math.round((completed / items.length) * 100);
+        } else {
+            // For admin view, use data-percent
+            percentage = parseInt(card.dataset.percent) || 0;
         }
 
-        item.addEventListener("click", () => {
-            if (circle.classList.contains("checked")) {
-                circle.classList.remove("checked");
-                completed--;
-            } else {
-                circle.classList.add("checked");
-                completed++;
+        // Update progress
+        function updateProgress() {
+            progressText.textContent = percentage + "%";
+            const stroke = 339.292;
+            const offset = stroke - (stroke * (percentage / 100));
+            progressBar.style.strokeDashoffset = offset;
+
+            // Confetti trigger bij 100%
+            if (percentage === 100 && items.length > 0) {  // only for users
+                launchConfetti();
+                sessionStorage.setItem("confettiPlayed", "true");
             }
-            updateProgress();
-        });
-    });
+        }
 
-    // Initialiseer progress bij load
-    updateProgress();
+        updateProgress();
+
+        // Klik-event voor checklist items (only for users)
+        if (items.length > 0) {
+            items.forEach(item => {
+                const circle = item.querySelector(".circle");
+                item.addEventListener("click", () => {
+                    if (circle.classList.contains("checked")) {
+                        circle.classList.remove("checked");
+                        completed--;
+                    } else {
+                        circle.classList.add("checked");
+                        completed++;
+                    }
+                    percentage = Math.round((completed / items.length) * 100);
+                    updateProgress();
+                });
+            });
+        }
+    });
 });
 
 /* -------------------------------
