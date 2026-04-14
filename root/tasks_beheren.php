@@ -28,31 +28,88 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($action === 'delete' && $id) {
         try {
-            $stmt = $pdo->prepare("DELETE FROM checklist_items WHERE id = ?");
+            $pdo->beginTransaction();
+
+            $stmt = $pdo->prepare("SELECT checklist_id, title FROM checklist_items WHERE id = ?");
             $stmt->execute([$id]);
-            $success = 'Taak verwijderd.';
+            $item = $stmt->fetch();
+
+            if ($item) {
+                $stmt = $pdo->prepare("DELETE FROM checklist_items WHERE id = ?");
+                $stmt->execute([$id]);
+
+                $stmt = $pdo->prepare("DELETE FROM user_tasks WHERE checklist_id = ? AND title = ?");
+                $stmt->execute([$item['checklist_id'], $item['title']]);
+
+                $pdo->commit();
+                $success = 'Taak verwijderd en bijbehorende gebruikersdata aangepast.';
+            } else {
+                $pdo->rollBack();
+                $errors[] = 'Taak niet gevonden.';
+            }
         } catch (PDOException $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
             $errors[] = 'Fout bij verwijderen: ' . $e->getMessage();
         }
     } elseif ($action === 'create' && $title && $checklist_id) {
         try {
-            // Get next sort order
+            $pdo->beginTransaction();
+
             $stmt = $pdo->prepare("SELECT COALESCE(MAX(sort_order), 0) + 1 FROM checklist_items WHERE checklist_id = ?");
             $stmt->execute([$checklist_id]);
             $sortOrder = (int)$stmt->fetchColumn();
 
             $stmt = $pdo->prepare("INSERT INTO checklist_items (checklist_id, title, sort_order) VALUES (?, ?, ?)");
             $stmt->execute([$checklist_id, $title, $sortOrder]);
-            $success = 'Taak toegevoegd.';
+
+            $stmt = $pdo->prepare("SELECT user_id FROM checklist_assignments WHERE checklist_id = ?");
+            $stmt->execute([$checklist_id]);
+            $assignedUsers = $stmt->fetchAll(PDO::FETCH_COLUMN);
+
+            $insertUserTask = $pdo->prepare("INSERT INTO user_tasks (user_id, checklist_id, title, sort_order, completed) VALUES (?, ?, ?, ?, 0)");
+            $orderStmt = $pdo->prepare("SELECT COALESCE(MAX(sort_order), 0) + 1 FROM user_tasks WHERE user_id = ? AND checklist_id = ?");
+
+            foreach ($assignedUsers as $userId) {
+                $orderStmt->execute([$userId, $checklist_id]);
+                $userSortOrder = (int)$orderStmt->fetchColumn();
+                $insertUserTask->execute([$userId, $checklist_id, $title, $userSortOrder]);
+            }
+
+            $pdo->commit();
+            $success = 'Taak toegevoegd en beschikbare gebruikersdata bijgewerkt.';
         } catch (PDOException $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
             $errors[] = 'Fout bij toevoegen: ' . $e->getMessage();
         }
     } elseif ($action === 'update' && $id && $title) {
         try {
-            $stmt = $pdo->prepare("UPDATE checklist_items SET title = ? WHERE id = ?");
-            $stmt->execute([$title, $id]);
-            $success = 'Taak bijgewerkt.';
+            $pdo->beginTransaction();
+
+            $stmt = $pdo->prepare("SELECT checklist_id, title FROM checklist_items WHERE id = ?");
+            $stmt->execute([$id]);
+            $item = $stmt->fetch();
+
+            if ($item) {
+                $stmt = $pdo->prepare("UPDATE checklist_items SET title = ? WHERE id = ?");
+                $stmt->execute([$title, $id]);
+
+                $stmt = $pdo->prepare("UPDATE user_tasks SET title = ? WHERE checklist_id = ? AND title = ?");
+                $stmt->execute([$title, $item['checklist_id'], $item['title']]);
+
+                $pdo->commit();
+                $success = 'Taak bijgewerkt voor checklist en gekoppelde gebruikers.';
+            } else {
+                $pdo->rollBack();
+                $errors[] = 'Taak niet gevonden.';
+            }
         } catch (PDOException $e) {
+            if ($pdo->inTransaction()) {
+                $pdo->rollBack();
+            }
             $errors[] = 'Fout bij bewerken: ' . $e->getMessage();
         }
     }

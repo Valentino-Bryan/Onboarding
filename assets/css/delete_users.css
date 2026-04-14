@@ -1,0 +1,190 @@
+/* Delete Users Page Styles */
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.users-table th {
+    background-color: #f3f4f6;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+    border-bottom: 2px solid #d1d5db;
+}
+
+.users-table td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.users-table tr:hover {
+    background-color: #f9fafb;
+}
+
+.role-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.role-badge.admin {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.role-badge.user {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.delete-btn {
+    background-color: #dc2626;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+    background-color: #b91c1c;
+}
+
+.delete-btn:disabled {
+    background-color: #d1d5db;
+    cursor: not-allowed;
+}
+
+.empty-message {
+    padding: 20px;
+    text-align: center;
+    color: #6b7280;
+    background-color: #f9fafb;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.error-message {
+    background-color: #fee2e2;
+    color: #991b1b;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border-left: 4px solid #dc2626;
+}
+
+.success-message {
+    background-color: #dcfce7;
+    color: #166534;
+    padding: 12px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    border-left: 4px solid #22c55e;
+}
+
+/* Custom Confirmation Modal */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+.modal-content {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    padding: 24px;
+    max-width: 400px;
+    width: 90%;
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-header {
+    margin-bottom: 16px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #1f2937;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.modal-body {
+    margin-bottom: 24px;
+    color: #4b5563;
+    line-height: 1.5;
+}
+
+.modal-body strong {
+    display: block;
+    color: #1f2937;
+    margin-top: 8px;
+}
+
+.modal-footer {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.modal-btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 14px;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.modal-btn:active {
+    transform: scale(0.98);
+}
+
+.modal-btn-cancel {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.modal-btn-cancel:hover {
+    background-color: #d1d5db;
+}
+
+.modal-btn-confirm {
+    background-color: #dc2626;
+    color: white;
+}
+
+.modal-btn-confirm:hover {
+    background-color: #b91c1c;
+}

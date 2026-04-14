@@ -16,6 +16,10 @@ if (($_SESSION['role'] ?? 'user') !== 'admin') {
 $errors = [];
 $success = '';
 
+if (isset($_GET['success'])) {
+    $success = trim($_GET['success']);
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $id = (int)($_POST['id'] ?? 0);
@@ -52,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             try {
                 $stmt = $pdo->prepare("INSERT INTO checklists (title, description) VALUES (?, ?)");
                 $stmt->execute([$title, $description]);
-                $success = 'Afvinklijst toegevoegd.';
+                $success = 'Afvinklijst succesvol toegevoegd.';
                 header('Location: afvinklijsten_beheren.php?success=' . urlencode($success));
                 exit();
             } catch (PDOException $e) {
@@ -79,6 +83,7 @@ if (isset($_GET['edit'])) {
     <title>Afvinklijsten Beheren</title>
     <link rel="stylesheet" href="../assets/css/login.css"/>
     <link rel="stylesheet" href="../assets/css/admin_nav.css"/>
+    <link rel="stylesheet" href="../assets/css/afvinklijsten_beheren.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 </head>
 <body>
@@ -150,10 +155,10 @@ if (isset($_GET['edit'])) {
                         </div>
                         <div style="display:flex;gap:12px;">
                             <a href="?edit=<?= $list['id'] ?>" style="padding:8px 14px;font-size:0.85rem;background:#f3f4f6;color:#374151;text-decoration:none;border-radius:6px;transition:0.2s;">Bewerken</a>
-                            <form method="POST" action="" style="display:inline;">
+                            <form method="POST" action="" style="display:inline;" class="delete-list-form">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?= $list['id'] ?>">
-                                <button type="submit" style="padding:8px 14px;font-size:0.85rem;background:#dc2626;color:#fff;border:none;border-radius:6px;cursor:pointer;transition:0.2s;" onclick="return confirm('Weet je zeker dat je deze afvinklijst wilt verwijderen?')">Verwijderen</button>
+                                <button type="button" class="delete-list-btn" data-title="<?= htmlspecialchars($list['title'], ENT_QUOTES) ?>" style="padding:8px 14px;font-size:0.85rem;background:#dc2626;color:#fff;border:none;border-radius:6px;cursor:pointer;transition:0.2s;">Verwijderen</button>
                             </form>
                         </div>
                     </div>
@@ -162,6 +167,58 @@ if (isset($_GET['edit'])) {
         <?php endif; ?>
     </div>
 </main>
+
+<div class="delete-modal-overlay" id="deleteModal">
+    <div class="delete-modal">
+        <h3>Weet je het zeker?</h3>
+        <p>Je staat op het punt om een afvinklijst te verwijderen. Deze actie kan gegevens van gebruikers aanpassen die deze lijst toegewezen hebben gekregen.</p>
+        <strong id="deleteListTitle"></strong>
+        <div class="delete-modal-buttons">
+            <button type="button" class="delete-modal-button cancel" onclick="closeDeleteModal()">Annuleren</button>
+            <button type="button" class="delete-modal-button confirm" onclick="confirmDelete()">Verwijderen</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    let deleteForm = null;
+
+    function openDeleteModal(form, title) {
+        deleteForm = form;
+        document.getElementById('deleteListTitle').textContent = title;
+        document.getElementById('deleteModal').classList.add('show');
+    }
+
+    function closeDeleteModal() {
+        deleteForm = null;
+        document.getElementById('deleteModal').classList.remove('show');
+    }
+
+    function confirmDelete() {
+        if (deleteForm) {
+            deleteForm.submit();
+        }
+    }
+
+    document.querySelectorAll('.delete-list-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const form = this.closest('form');
+            if (!form) return;
+            deleteForm = form;
+            document.getElementById('deleteListTitle').textContent = this.dataset.title || '';
+            document.getElementById('deleteModal').classList.add('show');
+        });
+    });
+
+    const deleteModal = document.getElementById('deleteModal');
+    if (deleteModal) {
+        deleteModal.addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeDeleteModal();
+            }
+        });
+    }
+</script>
 
 <footer>
     <p>© Technolab Leiden | Admin</p>

@@ -69,10 +69,18 @@ require_once __DIR__ . '/../includes/navigation.php';
 
                 <div class="checklist-item">
                     <div class="left">
+                        <span>Gebruikers verwijderen</span>
+                    </div>
+                    <a class="btn" href="delete_users.php">Open</a>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="left">
                         <span>Onboarding dashboard</span>
                     </div>
                     <a class="btn" href="onboarding.php">Open</a>
                 </div>
+
             </div>
         </div>
     </main>

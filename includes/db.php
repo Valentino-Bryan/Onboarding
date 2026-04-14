@@ -3,7 +3,7 @@
 // PDO connection - no output, no BOM, no echo
 
 $host = '127.0.0.1';
-$db   = 'onboarding';
+$db   = 'technolab-dashboard';
 $user = 'root';
 $pass = '';
 $charset = 'utf8mb4';

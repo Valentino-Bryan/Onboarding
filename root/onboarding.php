@@ -6,15 +6,23 @@ $userId = $_SESSION['user_id'];
 $isAdmin = ($_SESSION['role'] ?? 'user') === 'admin';
 
 if ($isAdmin) {
+    // $stmt = $pdo->prepare("
+    //     SELECT u.id as user_id, u.username, u.email,
+    //            ci.id as item_id, ci.title,
+    //            IF(cp.completed IS NULL, 0, cp.completed) AS completed
+    //     FROM users u
+    //     JOIN checklist_assignments ca ON ca.user_id = u.id
+    //     JOIN checklist_items ci ON ci.checklist_id = ca.checklist_id
+    //     LEFT JOIN checklist_progress cp ON cp.checklist_item_id = ci.id AND cp.user_id = u.id
+    //     WHERE u.role != 'admin'
+    //     ORDER BY u.username
+    // ");
     $stmt = $pdo->prepare("
-        SELECT u.id as user_id, u.username, u.email,
-               ci.id as item_id, ci.title,
-               IF(cp.completed IS NULL, 0, cp.completed) AS completed
-        FROM users u
-        JOIN checklist_assignments ca ON ca.user_id = u.id
-        JOIN checklist_items ci ON ci.checklist_id = ca.checklist_id
-        LEFT JOIN checklist_progress cp ON cp.checklist_item_id = ci.id AND cp.user_id = u.id
-        WHERE u.role != 'admin'
+                SELECT u.id as user_id, u.username, u.email,
+               ut.id, ut.title, ut.completed
+        FROM user_tasks ut
+        INNER JOIN users u ON u.id = ut.user_id
+        WHERE u.role != 'admin' 
         ORDER BY u.username
     ");
     $stmt->execute();
@@ -30,12 +38,13 @@ if ($isAdmin) {
             ];
         }
         $userProgress[$uid]['items'][] = [
-            'id' => $item['item_id'],
+            'id' => $item['checklist_id'] ?? $item['id'],
             'title' => $item['title'],
             'completed' => $item['completed']
         ];
     }
 
+    
     // Calculate progress for each
     foreach ($userProgress as &$up) {
         $total = count($up['items']);
@@ -43,34 +52,29 @@ if ($isAdmin) {
         $up['total'] = $total;
         $up['done'] = $done;
         $up['percent'] = $total ? round($done / $total * 100) : 0;
-    }
-} else {
-    $stmt = $pdo->prepare("
-        SELECT ci.id, ci.title,
-               IF(cp.completed IS NULL, 0, cp.completed) AS completed
-        FROM checklist_items ci
-        JOIN checklist_assignments ca ON ca.checklist_id = ci.checklist_id
-        LEFT JOIN checklist_progress cp ON cp.checklist_item_id = ci.id AND cp.user_id = ?
-        WHERE ca.user_id = ?
-    ");
-    $stmt->execute([$userId, $userId]);
-    $items = $stmt->fetchAll();
-
-    // Bereken voortgang
-    $total = count($items);
-    $done = array_sum(array_column($items,'completed'));
-    $percent = $total ? round($done/$total*100) : 0;
-
-    $userProgress = [
-        $userId => [
-            'username' => $_SESSION['username'] ?? 'Gebruiker',
-            'items' => $items,
-            'total' => $total,
-            'done' => $done,
-            'percent' => $percent
-        ]
-    ];
-}
+        }
+        } else {
+            $stmt = $pdo->prepare("
+            SELECT id, title, completed FROM user_tasks u WHERE u.user_id = ?
+            ");
+            $stmt->execute([$userId]);
+            $items = $stmt->fetchAll();
+            
+            // Bereken voortgang
+            $total = count($items);
+            $done = array_sum(array_column($items,'completed'));
+            $percent = $total ? round($done/$total*100) : 0;
+            
+            $userProgress = [
+                $userId => [
+                    'username' => $_SESSION['username'] ?? 'Gebruiker',
+                    'items' => $items,
+                    'total' => $total,
+                    'done' => $done,
+                    'percent' => $percent
+                    ]
+                    ];
+                    }
 ?>
 
 
@@ -132,8 +136,7 @@ if ($isAdmin) {
     <!-- ========================= -->
     <main class="main">
         <div class="layout">
-
-            <?php foreach ($userProgress as $uid => $up): ?>
+            <?php foreach ($userProgress as $uid => &$up):?>
                 <div class="user-section">
                 <div class="progress-card" data-complete="<?= $up['percent'] === 100 ? 'true' : 'false' ?>" data-percent="<?= $up['percent'] ?>">
 

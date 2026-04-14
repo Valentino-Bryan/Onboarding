@@ -13,7 +13,7 @@ if (($_SESSION['role'] ?? 'user') !== 'admin') {
 
 // ================= DB CONNECTIE =================
 $host = "127.0.0.1";
-$db   = "onboarding";
+$db   = "technolab-dashboard";
 $user = "root";
 $pass = "";
 $charset = "utf8mb4";

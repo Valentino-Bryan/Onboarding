@@ -9,22 +9,34 @@ document.addEventListener('DOMContentLoaded', () => {
   /* ===== USER SELECTION ===== */
   const userSearch = document.getElementById('user-search');
   const userDropdown = document.getElementById('userDropdown');
+  const userNameDisplay = document.getElementById('userName');
   
   if (userSearch && userDropdown) {
-    // Show dropdown when input is focused
-    userSearch.addEventListener('focus', () => {
-      userDropdown.classList.add('show');
-    });
+    // Update display when page loads if user is selected
+    const selectedUsername = userSearch.value.trim();
+    if (selectedUsername) {
+      userNameDisplay.textContent = selectedUsername;
+    }
 
-    // Filter users when typing
+    // Filter users when typing and show/hide dropdown
     userSearch.addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
+      const searchTerm = e.target.value.toLowerCase().trim();
       const items = userDropdown.querySelectorAll('.dropdown-item');
+      let visibleCount = 0;
       
       items.forEach(item => {
         const text = item.textContent.toLowerCase();
-        item.style.display = text.includes(searchTerm) ? 'flex' : 'none';
+        const isVisible = text.includes(searchTerm);
+        item.style.display = isVisible ? 'flex' : 'none';
+        if (isVisible) visibleCount++;
       });
+
+      // Show dropdown only if there's a search term and matching items
+      if (searchTerm.length > 0 && visibleCount > 0) {
+        userDropdown.classList.add('show');
+      } else {
+        userDropdown.classList.remove('show');
+      }
     });
 
     // Handle user selection
@@ -36,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Update input field
         userSearch.value = userName;
+        
+        // Update display name
+        userNameDisplay.textContent = userName;
         
         // Hide dropdown
         userDropdown.classList.remove('show');

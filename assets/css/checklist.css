@@ -1,9 +1,33 @@
+body.page {
+    margin: 0;
+    font-family: "Space Grotesk", sans-serif;
+    background: #ffffff;
+    color: #333;
+}
 /* -----------------------------------
    CHECKLIST & TASKS
 ----------------------------------- */
-#user-search {
-    
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid var(--gray-300);
+    border-radius: 8px;
+    margin-top: 4px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 10;
+    display: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+.dropdown.show {
+    display: block;
+}
+
 .dropdown-item:hover {
     background: rgba(0, 0, 0, 0.05);
 }
@@ -12,6 +36,35 @@
     padding: 10px 16px;
     border-radius: 8px;
     transition: background 0.15s ease;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.user-select {
+    position: relative;
+}
+
+.selected-user {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 8px 12px;
+    background: #f3f4f6;
+    border-radius: 6px;
+    font-size: 0.95rem;
+}
+
+.user-label {
+    color: var(--gray-600);
+    font-weight: 600;
+}
+
+.user-name {
+    color: var(--techno-purple);
+    font-weight: 700;
 }
 
 
@@ -230,4 +283,60 @@
         width: 100%;
         justify-content: center;
     }
+}   
+    body.page {
+    margin: 0;
+    font-family: "Space Grotesk", sans-serif;
+    background: #ffffff;
+    color: #333;
+}
+    .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+
+    /* LOGO + TITEL */
+    .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+    .nav-left svg {
+    fill: #000000;
+}
+
+    .brand {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* RIGHT SIDE */
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 20px 40px;
+    max-width: 1280px;
+    margin: auto;
+}
+
+:root {
+    --techno-purple: #44205F;
+    --techno-green: #94C01F;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-800: #1f2937;
 }

@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+
 session_start();
 require_once __DIR__ . '/../includes/db.php';
 require_once __DIR__ . '/../includes/navigation.php';
@@ -58,13 +61,20 @@ if ($userId) {
         }
 
         // Haal taken op
-        $stmt = $pdo->prepare("
-            SELECT id, title, completed
-            FROM user_tasks
-            WHERE user_id = ? AND checklist_id = ?
-            ORDER BY sort_order, id
+        // $stmt = $pdo->prepare(" 
+        //     SELECT ci.id, cp.user_id, title, completed
+        //     FROM checklist_items ci
+        //     INNER JOIN checklist_progress cp 
+        //     ON ci.id = cp.checklist_item_id 
+        //     INNER JOIN users u ON ? = cp.user_id WHERE u.id = cp.user_id
+        // "); 
+
+           $stmt = $pdo->prepare(" 
+            SELECT id, title, completed from user_tasks where user_tasks.user_id = ?
         ");
-        $stmt->execute([$userId, $checklist['id']]);
+
+
+        $stmt->execute([$userId]);
         $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
@@ -84,6 +94,10 @@ if ($userId) {
         <div class="top-bar">
             <div class="title-block">
                 <h2>Checklist beheren</h2>
+                <div class="selected-user" id="selectedUser">
+                    <span class="user-label">Geselecteerde gebruiker:</span>
+                    <span class="user-name" id="userName">Geen geselecteerd</span>
+                </div>
             </div>
             <div class="user-select">
                 <div class="input-wrapper">
@@ -115,12 +129,6 @@ if ($userId) {
                             <span class="material-symbols-outlined drag-icon">drag_indicator</span>
                             <input type="checkbox" class="task-complete" <?= $task['completed'] ? 'checked' : '' ?>>
                             <p class="task-title"><?= htmlspecialchars($task['title']) ?></p>
-                            <button class="edit" title="Bewerken">
-                                <span class="material-symbols-outlined">edit</span>
-                            </button>
-                            <button class="delete" title="Verwijderen">
-                                <span class="material-symbols-outlined">delete</span>
-                            </button>
                         </div>
                     <?php endforeach; ?>
                 </div>

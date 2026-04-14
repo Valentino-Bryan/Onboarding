@@ -6,17 +6,22 @@ $errors = [];
 $success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username'] ?? '');
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     $confirm_password = $_POST['confirm-password'] ?? '';
 
     // Validate input
-    if (empty($email) || empty($password) || empty($confirm_password)) {
+    if (empty($username) || empty($email) || empty($password) || empty($confirm_password)) {
         $errors[] = "Alle velden zijn verplicht.";
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $errors[] = "Ongeldig e-mailadres.";
+    }
+
+    if (strlen($username) < 3) {
+        $errors[] = "Gebruikersnaam moet minimaal 3 karakters lang zijn.";
     }
 
     if ($password !== $confirm_password) {
@@ -29,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         try {
-            // Check if email exists (must be pre-connected) and set password
+            // Check if email exists (pre-created account)
             $stmt = $pdo->prepare("SELECT id, password FROM users WHERE email = ?");
             $stmt->execute([$email]);
             $user = $stmt->fetch();
@@ -39,15 +44,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif (!empty($user['password'])) {
                 $errors[] = "Dit account is al geregistreerd. U kunt inloggen.";
             } else {
-                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-                $stmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
+                // Check if username already exists
+                $stmt = $pdo->prepare("SELECT id FROM users WHERE username = ?");
+                $stmt->execute([$username]);
 
-                if ($stmt->execute([$hashed_password, $user['id']])) {
-                    $success = "Registratie succesvol! U kunt nu inloggen.";
-                    // Clear form
-                    $email = '';
+                if ($stmt->fetch()) {
+                    $errors[] = "Deze gebruikersnaam is al in gebruik.";
                 } else {
-                    $errors[] = "Er is een fout opgetreden. Probeer het later opnieuw.";
+                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+                    // Update BOTH password AND username
+                    $stmt = $pdo->prepare("UPDATE users SET username = ?, password = ? WHERE id = ?");
+
+                    if ($stmt->execute([$username, $hashed_password, $user['id']])) {
+                        $success = "Registratie succesvol! U kunt nu inloggen.";
+                        $username = '';
+                        $email = '';
+                    } else {
+                        $errors[] = "Er is een fout opgetreden. Probeer het later opnieuw.";
+                    }
                 }
             }
         } catch (PDOException $e) {
@@ -74,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <main>
     <div class="login-box">
       <h1>Account Aanmaken</h1>
+
       <?php if (!empty($errors)): ?>
         <div class="error-message">
           <?php foreach ($errors as $error): ?>
@@ -89,20 +105,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <?php endif; ?>
 
       <form method="POST" action="" novalidate>
+        
+        <div class="form-group">
+          <label for="username">Gebruikersnaam:</label>
+          <input 
+            id="username" 
+            name="username" 
+            type="text" 
+            value="<?php echo isset($username) ? htmlspecialchars($username) : ''; ?>" 
+            required
+          />
+        </div>
+
         <div class="form-group">
           <label for="email">E-mail:</label>
-          <input id="email" name="email" type="email" value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" required/>
+          <input 
+            id="email" 
+            name="email" 
+            type="email" 
+            value="<?php echo isset($email) ? htmlspecialchars($email) : ''; ?>" 
+            required
+          />
         </div>
+
         <div class="form-group">
           <label for="password">Wachtwoord:</label>
           <input id="password" name="password" type="password" required/>
         </div>
+
         <div class="form-group">
           <label for="confirm-password">Bevestig wachtwoord:</label>
           <input id="confirm-password" name="confirm-password" type="password" required/>
         </div>
+
         <button type="submit">Registreren</button>
       </form>
+
       <div class="links">
         <a href="login.php">Terug naar inloggen</a>
       </div>

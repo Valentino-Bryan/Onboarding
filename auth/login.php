@@ -10,18 +10,16 @@ if (isset($_SESSION['user_id'])) {
 require_once __DIR__ . '/../includes/db.php';
 
 $error = '';
-$email = '';
+$login = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
+    $login = trim($_POST['login'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    $isAdminIdentifier = strcasecmp($email, 'admin') === 0;
+    $isAdminIdentifier = strcasecmp($login, 'admin') === 0;
 
-    if (empty($email) || empty($password)) {
-        $error = 'Vul zowel e-mail als wachtwoord in.';
-    } elseif (!$isAdminIdentifier && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $error = 'Ongeldig e-mailadres.';
+    if (empty($login) || empty($password)) {
+        $error = 'Vul zowel gebruikersnaam/e-mail als wachtwoord in.';
     } else {
         try {
             // Check if user exists
@@ -29,9 +27,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmt = $pdo->prepare("SELECT id, username, email, password, role FROM users WHERE role = 'admin' ORDER BY id LIMIT 1");
                 $stmt->execute();
             } else {
-                $stmt = $pdo->prepare("SELECT id, username, email, password, role FROM users WHERE email = ?");
-                $stmt->execute([$email]);
+                $stmt = $pdo->prepare("SELECT id, username, email, password, role FROM users WHERE email = ? OR username = ?");
+                $stmt->execute([$login, $login]);
             }
+
             $user = $stmt->fetch();
 
             if ($isAdminIdentifier && !$user) {
@@ -39,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
 
                 $passwordOk = false;
+
                 if ($user) {
                     $storedPassword = (string)($user['password'] ?? '');
                     $isHashed = str_starts_with($storedPassword, '$2y$') || str_starts_with($storedPassword, '$2a$') || str_starts_with($storedPassword, '$argon2');
@@ -47,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $passwordOk = password_verify($password, $storedPassword);
                     } else {
                         $passwordOk = hash_equals($storedPassword, (string)$password);
+
                         if ($passwordOk) {
                             $rehash = password_hash($password, PASSWORD_DEFAULT);
                             $rehashStmt = $pdo->prepare("UPDATE users SET password = ? WHERE id = ?");
@@ -58,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 if ($user && $passwordOk) {
                     // Password is correct, start session
                     $_SESSION['user_id'] = $user['id'];
-                    $_SESSION['username'] = $user['username'] ?: ($user['email'] ?: $email);
+                    $_SESSION['username'] = $user['username'] ?? $user['email'];
                     $_SESSION['role'] = $user['role'];
 
                     // Regenerate session ID to prevent session fixation
@@ -73,12 +74,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header('Location: ../root/onboarding.php');
                     exit();
                 } else {
-                    $error = 'Ongeldig e-mailadres of wachtwoord.';
+                    $error = 'Ongeldige gebruikersnaam/e-mail of wachtwoord.';
                 }
             }
         } catch (PDOException $e) {
             $error = 'Er is een fout opgetreden. Probeer het later opnieuw.';
-            // For debugging: $error = 'Databasefout: ' . $e->getMessage();
         }
     }
 }
@@ -101,6 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <main>
             <div class="login-box">
                 <h1>Inloggen</h1>
+
                 <?php if ($error): ?>
                     <div class="error-message">
                         <p><?php echo htmlspecialchars($error); ?></p>
@@ -109,15 +110,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <form method="POST" action="" novalidate>
                     <div class="form-group">
-                        <label for="email">E-mail:</label>
-                        <input id="email" name="email" type="email" value="<?php echo htmlspecialchars($email); ?>" required autofocus/>
+                        <label for="login">Gebruikersnaam of e-mail:</label>
+                        <input 
+                            id="login" 
+                            name="login" 
+                            type="text" 
+                            value="<?php echo htmlspecialchars($login); ?>" 
+                            placeholder="Gebruikersnaam of e-mail"
+                            required 
+                            autofocus
+                        />
                     </div>
+
                     <div class="form-group">
                         <label for="password">Wachtwoord:</label>
                         <input id="password" name="password" type="password" required/>
                     </div>
+
                     <button type="submit">Log in</button>
                 </form>
+
                 <div class="links">
                     <a href="registreren.php">Account aanmaken</a>
                 </div>
