@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once __DIR__ . '/../includes/db.php';
+require_once __DIR__ . '/../includes/navigation.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../auth/login.php');
@@ -75,16 +76,6 @@ try {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 </head>
 <body>
-<nav class="admin-nav">
-    <span class="brand">Admin</span>
-    <a href="admin_hub.php">Hub</a>
-    <a href="connect_emails.php" class="current">E-mails koppelen</a>
-    <a href="toewijzen.php">Toewijzen</a>
-    <a href="checklist.php">Checklist</a>
-    <a href="afvinklijsten_beheren.php">Afvinklijsten</a>
-    <a href="onboarding.php">Onboarding</a>
-    <a href="../auth/logout.php" class="logout" onclick="showLogoutModal(event, '../auth/logout.php')">Uitloggen</a>
-</nav>
 
 <!-- Logout confirmation modal -->
 <div class="logout-modal" id="logoutModal">

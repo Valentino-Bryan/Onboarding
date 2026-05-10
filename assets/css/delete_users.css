@@ -188,3 +188,75 @@
 .modal-btn-confirm:hover {
     background-color: #b91c1c;
 }
+
+@media (max-width: 760px) {
+    .login-box {
+        padding: 16px;
+    }
+
+    .users-table {
+        width: 100%;
+        border: none;
+    }
+
+    .users-table thead {
+        display: none;
+    }
+
+    .users-table tr {
+        display: block;
+        margin-bottom: 18px;
+        border: 1px solid #e5e7eb;
+        border-radius: 22px;
+        box-shadow: 0 16px 30px rgba(15, 23, 42, 0.08);
+        background: #ffffff;
+        overflow: hidden;
+    }
+
+    .users-table td {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        padding: 14px 18px;
+        border: none;
+        border-bottom: 1px solid #eef2ff;
+        gap: 6px;
+    }
+
+    .users-table td:last-child {
+        border-bottom: none;
+    }
+
+    .users-table td::before {
+        content: attr(data-label);
+        color: #6b7280;
+        font-size: 0.82rem;
+        font-weight: 700;
+        display: block;
+    }
+
+    .users-table td[data-label="Actie"] {
+        border-bottom: none;
+        padding-bottom: 18px;
+    }
+
+    .users-table td[data-label="Actie"] .delete-btn {
+        width: 100%;
+    }
+
+    .delete-btn {
+        width: 100%;
+        padding: 14px 16px;
+        font-size: 0.95rem;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .modal-btn {
+        width: 100%;
+    }
+}

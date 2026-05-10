@@ -124,7 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     <div class="form-group">
                         <label for="password">Wachtwoord:</label>
-                        <input id="password" name="password" type="password" required/>
+                        <input id="password" name="password" type="password" required
+                        placeholder="Wachtwoord"/>
                     </div>
 
                     <button type="submit">Log in</button>

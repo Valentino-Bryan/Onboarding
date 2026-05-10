@@ -80,6 +80,7 @@ if (isset($_GET['edit'])) {
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Afvinklijsten Beheren</title>
     <link rel="stylesheet" href="../assets/css/login.css"/>
     <link rel="stylesheet" href="../assets/css/admin_nav.css"/>
@@ -146,16 +147,16 @@ if (isset($_GET['edit'])) {
             <div style="margin-top:24px;">
                 <h2 style="font-size:18px;margin:0 0 16px 0;color:#374151;">Bestaande afvinklijsten</h2>
                 <?php foreach ($checklists as $list): ?>
-                    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+                    <div class="checklist-item-row" style="display:flex;align-items:center;justify-content:space-between;padding:20px;border:1px solid #e5e7eb;border-radius:8px;margin-bottom:12px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,0.05);">
                         <div>
                             <strong style="display:block;margin-bottom:4px;"><?= htmlspecialchars($list['title']) ?></strong>
                             <?php if ($list['description']): ?>
                                 <small style="color:#6b7280;"><?= htmlspecialchars($list['description']) ?></small>
                             <?php endif; ?>
                         </div>
-                        <div style="display:flex;gap:12px;">
-                            <a href="?edit=<?= $list['id'] ?>" style="padding:8px 14px;font-size:0.85rem;background:#f3f4f6;color:#374151;text-decoration:none;border-radius:6px;transition:0.2s;">Bewerken</a>
-                            <form method="POST" action="" style="display:inline;" class="delete-list-form">
+                        <div class="item-actions" style="display:flex;gap:12px;">
+                            <a href="?edit=<?= $list['id'] ?>" class="btn-edit" style="padding:8px 14px;font-size:0.85rem;background:#f3f4f6;color:#374151;text-decoration:none;border-radius:6px;transition:0.2s;display:inline-flex;align-items:center;justify-content:center;">Bewerken</a>
+                            <form method="POST" action="" style="display:flex;align-items:center;" class="delete-list-form">
                                 <input type="hidden" name="action" value="delete">
                                 <input type="hidden" name="id" value="<?= $list['id'] ?>">
                                 <button type="button" class="delete-list-btn" data-title="<?= htmlspecialchars($list['title'], ENT_QUOTES) ?>" style="padding:8px 14px;font-size:0.85rem;background:#dc2626;color:#fff;border:none;border-radius:6px;cursor:pointer;transition:0.2s;">Verwijderen</button>

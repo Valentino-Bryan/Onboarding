@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
     progressCards.forEach(card => {
         const items = card.parentElement.querySelectorAll(".checklist-item");
         const progressText = card.querySelector(".progress-num");
-        const progressBar = card.querySelector(".progress-bar");
+        const progressFill = card.querySelector(".progress-bar-fill");
         let completed = 0;
         let percentage;
 
@@ -43,9 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
         // Update progress
         function updateProgress() {
             progressText.textContent = percentage + "%";
-            const stroke = 339.292;
-            const offset = stroke - (stroke * (percentage / 100));
-            progressBar.style.strokeDashoffset = offset;
+            const progressFill = card.querySelector(".progress-bar-fill");
+            progressFill.style.width = percentage + "%";
 
             // Confetti trigger bij 100%
             if (percentage === 100 && items.length > 0) {  // only for users

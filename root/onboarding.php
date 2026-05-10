@@ -123,7 +123,6 @@ if ($isAdmin) {
         <!-- Mobile dropdown -->
         <div class="mobile-menu" id="mobileMenu">
             <a href="onboarding.php">Onboarding</a>
-            <a href="toewijzen.php">Toewijzen</a>
             <?php if (($_SESSION['role'] ?? 'user') === 'admin'): ?>
                 <a href="admin_hub.php">Admin Hub</a>
             <?php endif; ?>
@@ -141,20 +140,19 @@ if ($isAdmin) {
                 <div class="progress-card" data-complete="<?= $up['percent'] === 100 ? 'true' : 'false' ?>" data-percent="<?= $up['percent'] ?>">
 
                         <div class="progress-wrapper">
-                            <svg viewBox="0 0 120 120">
-                                <circle cx="60" cy="60" r="54" class="progress-bg"></circle>
-                                <circle cx="60" cy="60" r="54" class="progress-bar"></circle>
-                            </svg>
-
-                            <div class="progress-center">
+                            <div class="progress-bar-bg">
+                                <div class="progress-bar-fill" style="width: <?php echo $up['percent']; ?>%"></div>
                                 <span class="progress-num"><?php echo $up['percent']; ?>%</span>
-                                <span class="progress-text">voltooid</span>
                             </div>
+
+                            <div class="progress-summary"><?php echo $up['done'] . ' / ' . $up['total'] . ' taken voltooid'; ?></div>
                         </div>
 
                         <div class="progress-info">
                             <h2><?php echo $isAdmin ? 'Voortgang van ' . htmlspecialchars($up['username']) : 'Jouw Voortgang'; ?></h2>
-                            <p>Laten we je account instellen. Voltooi alle stappen om te beginnen.</p>
+                            <?php if (!$isAdmin): ?>
+                                <p>Laten we je account instellen. Voltooi alle stappen om te beginnen.</p>
+                            <?php endif; ?>
                         </div>
                     </div>
 

@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once __DIR__ . '/../includes/db.php';
 
 if (!isset($_SESSION['user_id'])) {
     header('Location: ../auth/login.php');
@@ -11,29 +12,6 @@ if (($_SESSION['role'] ?? 'user') !== 'admin') {
     exit();
 }
 
-// ================= DB CONNECTIE =================
-$host = "127.0.0.1";
-$db   = "technolab-dashboard";
-$user = "root";
-$pass = "";
-$charset = "utf8mb4";
-// toewijzen.php
-// Geen whitespace of BOM boven deze tag!
-
-// Pas dit pad aan als jouw includes-map op een andere plaats staat.
-// Voorbeeld: __DIR__ . '/../includes/db.php' of __DIR__ . '/includes/db.php'
-$dbPath = __DIR__ . '/../includes/db.php';
-
-if (!file_exists($dbPath)) {
-    http_response_code(500);
-    echo '<h1>Configuratiefout</h1>';
-    echo '<p>Het bestand <code>includes/db.php</code> is niet gevonden op:</p>';
-    echo '<pre>' . htmlspecialchars($dbPath) . '</pre>';
-    echo '<p>Zorg dat <code>includes/db.php</code> bestaat en gebruik het juiste pad.</p>';
-    exit;
-}
-
-require_once $dbPath;
 
 // ================= FORM VERWERKEN =================
 $success = false;
@@ -93,67 +71,16 @@ $users = $pdo->query("SELECT id, username, email FROM users ORDER BY COALESCE(us
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Afvinklijst Toewijzen</title>
     <link rel="stylesheet" href="../assets/css/toewijzen.css">
     <link rel="stylesheet" href="../assets/css/admin_nav.css">
 </head>
 <body>
 
-<nav class="admin-nav">
-    <span class="brand">Admin</span>
-    <a href="admin_hub.php">Hub</a>
-    <a href="connect_emails.php">E-mails koppelen</a>
-    <a href="toewijzen.php" class="current">Toewijzen</a>
-    <a href="checklist.php">Checklist</a>
-    <a href="afvinklijsten_beheren.php">Afvinklijsten</a>
-    <a href="onboarding.php">Onboarding</a>
-    <a href="../auth/logout.php" class="logout" onclick="showLogoutModal(event, '../auth/logout.php')">Uitloggen</a>
-</nav>
+<?php require_once __DIR__ . '/../includes/navigation.php'; ?>
 
-<!-- Logout confirmation modal -->
-<div class="logout-modal" id="logoutModal">
-    <div class="logout-modal-content">
-        <h3>Uitloggen</h3>
-        <p>Weet je zeker dat je wilt uitloggen?</p>
-        <div class="logout-modal-buttons">
-            <button class="btn-cancel" onclick="closeLogoutModal()">Annuleren</button>
-            <button class="btn-confirm" onclick="confirmLogout()">Uitloggen</button>
-        </div>
-    </div>
-</div>
-<header class="header">
-    <nav class="nav">
-        <div class="nav-left">
-            <h1 class="brand">Technolab Leiden</h1>
-        </div>
-        <div class="hamburger" id="hamburger">
-            <span></span><span></span><span></span>
-        </div>
-    </nav>
-    <div class="mobile-menu" id="mobileMenu">
-        <a href="#">Meldingen</a>
-        <a href="#">Help</a>
-        <a href="#">Profiel</a>
-    </div>
-</div>
 
-<script>
-let logoutUrl = '';
-
-function showLogoutModal(event, url) {
-    event.preventDefault();
-    logoutUrl = url;
-    document.getElementById('logoutModal').classList.add('show');
-}
-
-function closeLogoutModal() {
-    document.getElementById('logoutModal').classList.remove('show');
-}
-
-function confirmLogout() {
-    window.location.href = logoutUrl;
-}
-</script>
 
 <main class="container">
     <h2 class="title">Afvinklijst Toewijzen</h2>

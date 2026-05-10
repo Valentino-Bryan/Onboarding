@@ -136,6 +136,7 @@ if ($selected_checklist_id) {
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Taken Beheren</title>
     <link rel="stylesheet" href="../assets/css/login.css"/>
     <link rel="stylesheet" href="../assets/css/admin_nav.css"/>
@@ -259,6 +260,86 @@ if ($selected_checklist_id) {
         }
         .delete-form {
             display: inline-block;
+        }
+
+        @media (max-width: 760px) {
+            .login-box {
+                width: min(100%, 95%);
+                margin: 16px auto;
+                padding: 16px;
+            }
+
+            h1 {
+                font-size: 1.9rem;
+                margin-bottom: 16px;
+            }
+
+            .checklist-selector,
+            .no-tasks,
+            .task-item,
+            .edit-form {
+                padding: 16px;
+                border-radius: 16px;
+            }
+
+            .checklist-selector {
+                margin-bottom: 18px;
+            }
+
+            .checklist-selector label {
+                display: block;
+                margin-bottom: 10px;
+                font-size: 0.96rem;
+            }
+
+            .checklist-selector select,
+            .edit-form input[type="text"] {
+                width: 100%;
+            }
+
+            .form-group {
+                margin-bottom: 16px;
+            }
+
+            form button,
+            .btn-edit,
+            .btn-delete,
+            .btn-save,
+            .btn-cancel {
+                width: 100%;
+                padding: 12px 14px;
+                font-size: 0.96rem;
+            }
+
+            .task-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 14px;
+            }
+
+            .task-info {
+                order: 1;
+            }
+
+            .task-actions {
+                width: 100%;
+                flex-wrap: wrap;
+                justify-content: stretch;
+                gap: 10px;
+            }
+
+            .task-actions .btn-edit,
+            .task-actions .delete-form {
+                width: 100%;
+            }
+
+            .task-order {
+                font-size: 0.95rem;
+            }
+
+            .no-tasks {
+                padding: 24px;
+            }
         }
     </style>
 </head>

@@ -52,7 +52,7 @@ body.page {
     gap: 8px;
     margin-top: 12px;
     padding: 8px 12px;
-    background: #f3f4f6;
+    
     border-radius: 6px;
     font-size: 0.95rem;
 }
@@ -283,7 +283,36 @@ body.page {
         width: 100%;
         justify-content: center;
     }
-}   
+}
+
+@media (max-width: 700px) {
+    .task-section {
+        padding: 16px;
+    }
+
+    .task-section h3,
+    .task-section p,
+    .task-item p {
+        font-size: 0.96rem;
+    }
+
+    .task-item {
+        gap: 12px;
+        padding: 12px 0;
+    }
+
+    .dropdown-item {
+        padding: 10px 14px;
+    }
+
+    .add-task-btn,
+    .cancel-btn,
+    .save-btn {
+        padding: 12px 16px;
+        font-size: 0.95rem;
+    }
+}
+
     body.page {
     margin: 0;
     font-family: "Space Grotesk", sans-serif;

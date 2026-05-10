@@ -31,6 +31,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isVisible) visibleCount++;
       });
 
+      // Hide tasks if the search text no longer matches the currently loaded user
+      if (searchTerm !== selectedUsername.toLowerCase()) {
+        clearTaskSection();
+      }
+
       // Show dropdown only if there's a search term and matching items
       if (searchTerm.length > 0 && visibleCount > 0) {
         userDropdown.classList.add('show');
@@ -38,6 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
         userDropdown.classList.remove('show');
       }
     });
+
+    function clearTaskSection() {
+      if (!taskSection) return;
+      taskSection.dataset.userId = '';
+      taskSection.dataset.checklistId = '';
+      taskSection.innerHTML = '<p>Selecteer een gebruiker</p>';
+    }
 
     // Handle user selection
     userDropdown.addEventListener('click', (e) => {

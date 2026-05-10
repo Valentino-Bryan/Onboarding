@@ -48,6 +48,7 @@ $users = $pdo->query("SELECT id, username, email, role, created_at FROM users OR
 <html lang="nl">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gebruikers Verwijderen</title>
     <link rel="stylesheet" href="../assets/css/login.css"/>
     <link rel="stylesheet" href="../assets/css/admin_nav.css"/>
@@ -92,15 +93,15 @@ $users = $pdo->query("SELECT id, username, email, role, created_at FROM users OR
                 <tbody>
                     <?php foreach ($users as $user): ?>
                         <tr>
-                            <td><?php echo htmlspecialchars($user['username'] ?? ''); ?></td>
-                            <td><?php echo htmlspecialchars($user['email'] ?? 'N/A'); ?></td>
-                            <td>
+                            <td data-label="Gebruikersnaam"><?php echo htmlspecialchars($user['username'] ?? ''); ?></td>
+                            <td data-label="E-mail"><?php echo htmlspecialchars($user['email'] ?? 'N/A'); ?></td>
+                            <td data-label="Rol">
                                 <span class="role-badge <?php echo htmlspecialchars($user['role']); ?>">
                                     <?php echo ucfirst(htmlspecialchars($user['role'])); ?>
                                 </span>
                             </td>
-                            <td><?php echo date('d-m-Y H:i', strtotime($user['created_at'])); ?></td>
-                            <td>
+                            <td data-label="Aangemaakt op"><?php echo date('d-m-Y H:i', strtotime($user['created_at'])); ?></td>
+                            <td data-label="Actie">
                                 <button 
                                     type="button" 
                                     class="delete-btn"

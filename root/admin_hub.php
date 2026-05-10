@@ -24,7 +24,7 @@ require_once __DIR__ . '/../includes/navigation.php';
 <body>
     <main class="main">
         <div class="layout">
-            <div class="progress-card" style="grid-column: 1 / -1;">
+            <div class="admin-progress-card" style="grid-column: 1 / -1;">
                 <div class="progress-info">
                     <h2>Beheer</h2>
                     <p>Kies een pagina hieronder.</p>
@@ -32,49 +32,49 @@ require_once __DIR__ . '/../includes/navigation.php';
             </div>
 
             <div class="checklist" style="grid-column: 1 / -1;">
-                <div class="checklist-item">
+                <div class="admin-checklist-item">
                     <div class="left">
                         <span>E-mails koppelen</span>
                     </div>
                     <a class="btn" href="connect_emails.php">Open</a>
                 </div>
 
-                <div class="checklist-item">
+                <div class="admin-checklist-item">
                     <div class="left">
                         <span>Checklists toewijzen</span>
                     </div>
                     <a class="btn" href="toewijzen.php">Open</a>
                 </div>
 
-                <div class="checklist-item">
+                <div class="admin-checklist-item">
                     <div class="left">
                         <span>Checklist beheren</span>
                     </div>
                     <a class="btn" href="checklist.php">Open</a>
                 </div>
 
-                <div class="checklist-item">
+                <div class="admin-checklist-item">
                     <div class="left">
                         <span>Afvinklijsten beheren</span>
                     </div>
                     <a class="btn" href="afvinklijsten_beheren.php">Open</a>
                 </div>
 
-                <div class="checklist-item">
+                <div class="admin-checklist-item">
                     <div class="left">
                         <span>Taken beheren</span>
                     </div>
                     <a class="btn" href="tasks_beheren.php">Open</a>
                 </div>
 
-                <div class="checklist-item">
+                <div class="admin-checklist-item">
                     <div class="left">
                         <span>Gebruikers verwijderen</span>
                     </div>
                     <a class="btn" href="delete_users.php">Open</a>
                 </div>
 
-                <div class="checklist-item">
+                <div class="admin-checklist-item">
                     <div class="left">
                         <span>Onboarding dashboard</span>
                     </div>

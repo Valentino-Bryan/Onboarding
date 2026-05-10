@@ -1,4 +1,8 @@
 /* ---------------- GLOBAL ---------------- */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     font-family: "Inter", sans-serif;
@@ -24,8 +28,9 @@ body {
 }
 
 .nav {
-    max-width: 1100px;
-    margin: auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
     padding: 16px 20px;
     display: flex;
     justify-content: space-between;
@@ -37,6 +42,7 @@ body {
     display: flex;
     align-items: center;
     gap: 12px;
+    margin-right: auto;
 }
 
 .nav-left img {
@@ -127,6 +133,29 @@ body {
     .hamburger { display: flex; }
 }
 
+@media (max-width: 700px) {
+    .main { padding: 24px 14px 48px; }
+    .layout { gap: 18px; }
+    .progress-card,
+    .admin-progress-card,
+    .card,
+    .task-section {
+        padding: 18px;
+        border-radius: 18px;
+    }
+    .progress-card h2,
+    .admin-progress-card h2,
+    .title { font-size: 1.25rem; }
+    .progress-info { gap: 12px; }
+    .progress-bar-fill { height: 16px; }
+    .checklist { gap: 12px; }
+    .checklist-item,
+    .admin-checklist-item { padding: 14px; }
+    .checklist-item .left span,
+    .admin-checklist-item .left span { font-size: 0.95rem; }
+    .circle { width: 18px; height: 18px; }
+}
+
 /* ---------------- MAIN LAYOUT ---------------- */
 .main {
     padding: 40px 20px 60px;
@@ -139,82 +168,95 @@ body {
     gap: 30px;
     max-width: 1100px;
     margin: auto;
+    justify-items: center;
+    align-items: start;
 }
 
 @media(min-width: 900px) {
     .layout {
-        grid-template-columns: 350px 1fr;
+        grid-template-columns: 1fr;
     }
 }
 
-/* ---------------- PROGRESS CARD ---------------- */
-.progress-card {
-    background: #fff;
-    padding: 30px;
-    border-radius: 14px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    position: sticky;
-    top: 20px;
-    transition: transform 0.2s ease;
+.user-section {
+    width: 100%;
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-.progress-card:hover {
+.checklist {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+/* ---------------- PROGRESS CARD ---------------- */
+.progress-card,
+.admin-progress-card {
+    width: 100%;
+    max-width: 720px;
+    background: #fff;
+    padding: 34px 32px;
+    border-radius: 24px;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.progress-card:hover,
+.admin-progress-card:hover {
     transform: translateY(-3px);
+    box-shadow: 0 22px 45px rgba(0,0,0,0.10);
 }
 
 .progress-wrapper {
-    width: 180px;
-    height: 180px;
-    margin: auto;
-    position: relative;
-}
-
-.progress-bg {
-    fill: none;
-    stroke: #e5e7eb;
-    stroke-width: 12;
-}
-
-.progress-bar {
-    fill: none;
-    stroke: #6b21a8;
-    stroke-width: 12;
-    stroke-dasharray: 339.292;
-    stroke-dashoffset: 339.292;
-    transform: rotate(-90deg);
-    transform-origin: 60px 60px;
-    transition: stroke-dashoffset 1s ease-out;
-}
-
-.progress-center {
-    position: absolute;
-    inset: 0;
+    width: 100%;
+    margin: 0 auto;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 14px;
+}
+
+.progress-bar-bg {
+    width: 100%;
+    max-width: 680px;
+    height: 16px;
+    background: #9f9fa0;
+    border-radius: 999px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-bar-fill {
+    height: 100%;
+    background: #6b21a8;
+    border-radius: 999px;
+    transition: width 1s ease-out;
 }
 
 .progress-num {
-    font-size: 32px;
-    font-weight: 800;
-    color: #44205f;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #ffffff;
 }
 
-.progress-text {
+.progress-summary {
     font-size: 14px;
     color: #6b7280;
-    margin-top: 4px;
-}
-
-.progress-info {
     text-align: center;
-    margin-top: 20px;
-}
-
-.progress-info h2 {
-    font-size: 22px;
-    margin-bottom: 6px;
 }
 
 /* ---------------- CHECKLIST ---------------- */
@@ -225,21 +267,33 @@ body {
     margin-top: 20px;
 }
 
-.checklist-item {
+.checklist-item,
+.admin-checklist-item {
+    width: 100%;
+    max-width: 700px;
     background: #fff;
-    padding: 18px 20px;
-    border-radius: 12px;
+    padding: 20px 24px;
+    border-radius: 18px;
     border: 1px solid #e5e7eb;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 16px;
     transition: all 0.25s ease;
 }
 
-.checklist-item:hover {
-    box-shadow: 0 8px 16px rgba(0,0,0,0.08);
-    border-color: #44205f;
+.checklist-item:hover,
+.admin-checklist-item:hover {
+    box-shadow: 0 12px 22px rgba(0,0,0,0.10);
+    border-color: #7c3aed;
     transform: translateY(-2px);
+}
+
+.admin-checklist-item .left span,
+.checklist-item .left span {
+    font-size: 15px;
+    font-weight: 400;
+    color: #000000;
 }
 
 .left {
