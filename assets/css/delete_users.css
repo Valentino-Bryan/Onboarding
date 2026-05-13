@@ -62,6 +62,28 @@
     cursor: not-allowed;
 }
 
+.toggle-role-btn {
+    background-color: #2563eb;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    margin-right: 8px;
+}
+
+.toggle-role-btn:hover {
+    background-color: #1d4ed8;
+}
+
+.toggle-role-btn:disabled {
+    background-color: #d1d5db;
+    cursor: not-allowed;
+}
+
 .empty-message {
     padding: 20px;
     text-align: center;
@@ -149,6 +171,11 @@
     display: block;
     color: #1f2937;
     margin-top: 8px;
+}
+
+.modal-body #currentRole, .modal-body #newRole {
+    font-weight: 600;
+    color: #2563eb;
 }
 
 .modal-footer {

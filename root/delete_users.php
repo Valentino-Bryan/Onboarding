@@ -14,9 +14,9 @@ if (($_SESSION['role'] ?? 'user') !== 'admin') {
 }
 
 $errors = [];
-$success = '';
+$success = $_GET['success'] ?? '';
 
-// Handle POST requests for user deletion
+// Handle POST requests for user deletion and role toggle
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $action = $_POST['action'] ?? '';
     $user_id = (int)($_POST['user_id'] ?? 0);
@@ -34,8 +34,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $pdo->prepare("DELETE FROM users WHERE id = ?")->execute([$user_id]);
 
                 $success = 'Gebruiker succesvol verwijderd.';
+                header('Location: ' . $_SERVER['PHP_SELF'] . '?success=' . urlencode($success));
+                exit();
             } catch (PDOException $e) {
                 $errors[] = 'Fout bij verwijderen: ' . $e->getMessage();
+            }
+        }
+    } elseif ($action === 'toggle_role' && $user_id) {
+        // Prevent changing own role
+        if ($user_id === $_SESSION['user_id']) {
+            $errors[] = 'Je kunt je eigen rol niet wijzigen.';
+        } else {
+            try {
+                // Get current role
+                $stmt = $pdo->prepare("SELECT role FROM users WHERE id = ?");
+                $stmt->execute([$user_id]);
+                $current_role = $stmt->fetchColumn();
+                
+                if ($current_role === 'user') {
+                    $new_role = 'admin';
+                } elseif ($current_role === 'admin') {
+                    $new_role = 'user';
+                } else {
+                    $errors[] = 'Ongeldige rol.';
+                    return;
+                }
+                
+                $pdo->prepare("UPDATE users SET role = ? WHERE id = ?")->execute([$new_role, $user_id]);
+                $success = 'Rol succesvol gewijzigd naar ' . ucfirst($new_role) . '.';
+                header('Location: ' . $_SERVER['PHP_SELF'] . '?success=' . urlencode($success));
+                exit();
+            } catch (PDOException $e) {
+                $errors[] = 'Fout bij wijzigen rol: ' . $e->getMessage();
             }
         }
     }
@@ -104,6 +134,14 @@ $users = $pdo->query("SELECT id, username, email, role, created_at FROM users OR
                             <td data-label="Actie">
                                 <button 
                                     type="button" 
+                                    class="toggle-role-btn"
+                                    onclick="toggleRole(<?php echo (int)$user['id']; ?>, <?php echo ($user['id'] === $_SESSION['user_id']) ? 'true' : 'false'; ?>, '<?php echo htmlspecialchars($user['username']); ?>', '<?php echo htmlspecialchars($user['role']); ?>')"
+                                    <?php echo ($user['id'] === $_SESSION['user_id']) ? 'disabled title="Je kunt je eigen rol niet wijzigen"' : ''; ?>
+                                >
+                                    <?php echo ($user['role'] === 'user') ? 'Maak Admin' : 'Maak User'; ?>
+                                </button>
+                                <button 
+                                    type="button" 
                                     class="delete-btn"
                                     onclick="openModal(<?php echo (int)$user['id']; ?>, <?php echo ($user['id'] === $_SESSION['user_id']) ? 'true' : 'false'; ?>, '<?php echo htmlspecialchars($user['username']); ?>')"
                                     <?php echo ($user['id'] === $_SESSION['user_id']) ? 'disabled title="Je kunt jezelf niet verwijderen"' : ''; ?>
@@ -137,15 +175,60 @@ $users = $pdo->query("SELECT id, username, email, role, created_at FROM users OR
     </div>
 </div>
 
+<!-- Role Toggle Modal -->
+<div class="modal-overlay" id="roleModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Rol wijzigen</h2>
+        </div>
+        <div class="modal-body">
+            Weet je zeker dat je de rol van <strong id="roleModalUsername"></strong> wilt wijzigen van <span id="currentRole"></span> naar <span id="newRole"></span>?
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn modal-btn-cancel" onclick="closeRoleModal()">Annuleren</button>
+            <button class="modal-btn modal-btn-confirm" onclick="confirmRoleToggle()">Bevestigen</button>
+        </div>
+    </div>
+</div>
+
 
 <form id="deleteForm" method="POST" style="display: none;">
     <input type="hidden" name="action" value="delete">
     <input type="hidden" name="user_id" id="deleteUserId">
 </form>
 
+<form id="toggleRoleForm" method="POST" style="display: none;">
+    <input type="hidden" name="action" value="toggle_role">
+    <input type="hidden" name="user_id" id="toggleRoleUserId">
+</form>
+
 <script>
     let currentDeleteUserId = null;
     let isCurrentUser = false;
+    let currentRoleToggleUserId = null;
+
+    function toggleRole(userId, isCurrentUser, username, currentRole) {
+        if (isCurrentUser) {
+            return; // Button is disabled, but just in case
+        }
+        currentRoleToggleUserId = userId;
+        document.getElementById('roleModalUsername').textContent = username;
+        document.getElementById('currentRole').textContent = currentRole;
+        document.getElementById('newRole').textContent = (currentRole === 'user') ? 'admin' : 'user';
+        document.getElementById('roleModal').classList.add('active');
+    }
+
+    function closeRoleModal() {
+        document.getElementById('roleModal').classList.remove('active');
+        currentRoleToggleUserId = null;
+    }
+
+    function confirmRoleToggle() {
+        if (currentRoleToggleUserId) {
+            document.getElementById('toggleRoleUserId').value = currentRoleToggleUserId;
+            document.getElementById('toggleRoleForm').submit();
+        }
+    }
 
     function openModal(userId, isCurrentUser, username) {
         if (isCurrentUser) {
@@ -179,6 +262,14 @@ $users = $pdo->query("SELECT id, username, email, role, created_at FROM users OR
     document.addEventListener('keydown', function(event) {
         if (event.key === 'Escape') {
             closeModal();
+            closeRoleModal();
+        }
+    });
+
+    // Close role modal when clicking outside of it
+    document.getElementById('roleModal').addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeRoleModal();
         }
     });
 </script>

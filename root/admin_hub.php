@@ -69,7 +69,7 @@ require_once __DIR__ . '/../includes/navigation.php';
 
                 <div class="admin-checklist-item">
                     <div class="left">
-                        <span>Gebruikers verwijderen</span>
+                        <span>Gebruikers bewerken</span>
                     </div>
                     <a class="btn" href="delete_users.php">Open</a>
                 </div>
